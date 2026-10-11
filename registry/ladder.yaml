@@ -15,7 +15,7 @@ rungs:
     label: The Moon
     target: {world: moon}
     distance: "384 400 km"
-    distance_source: "mean Earth-Moon distance, astronomy-engine"
+    distance_source: "mean Earth-Moon distance, astronomy-engine; NASA NSSDCA Moon Fact Sheet, https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html (read 2026-10-11)"
     why: "The only other world people have stood on. Light takes 1.3 seconds."
 
   - id: sun
