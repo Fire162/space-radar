@@ -32,6 +32,7 @@ terms:
   - {term: debris, say: "Dead satellites, spent rocket stages and fragments. Tens of thousands of pieces are tracked."}
   - {term: constellation, say: "A pattern of stars people named long ago. The stars in one are usually nowhere near each other."}
   - {term: L1, say: "A balance point between the Earth and the Sun, about 1.5 million km sunward. Good for watching the Sun."}
+  # L2: 1.5 million km from Earth, Orbit - NASA Science, https://science.nasa.gov/mission/webb/orbit/, read 2026-10-11.
   - {term: L2, say: "A balance point 1.5 million km from Earth on the side away from the Sun, where a telescope can keep the Earth and Sun behind it and stay cold."}
   - {term: transit, say: "When one thing passes in front of another as seen from where you stand."}
   - {term: conjunction, say: "When two things appear close together in the sky. They are not close in space."}
