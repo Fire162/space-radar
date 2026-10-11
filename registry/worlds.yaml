@@ -100,6 +100,7 @@ worlds:
     frames: [inertial, fixed]
     look: {textures: jupiter, atmosphere: thick}
 
+  # Saturn: radius_km is the volumetric mean radius and period_h the sidereal rotation period; NASA NSSDCA Planetary Fact Sheet, https://nssdc.gsfc.nasa.gov/planetary/factsheet/saturnfact.html, read 2026-10-11.
   - id: saturn
     display: Saturn
     parent: sun
