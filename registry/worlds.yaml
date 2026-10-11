@@ -58,6 +58,7 @@ worlds:
   # The planets are rows from day one so that growing outward is a camera flight rather than a
   # rewrite. They render as textured spheres at true direction and scaled distance until the
   # camera makes one of them the stage.
+  # Mercury: radius_km is the volumetric mean radius and period_h the sidereal rotation period; NASA NSSDCA Planetary Fact Sheet, https://nssdc.gsfc.nasa.gov/planetary/factsheet/mercuryfact.html, read 2026-10-11.
   - id: mercury
     display: Mercury
     parent: sun
