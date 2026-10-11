@@ -42,6 +42,7 @@ worlds:
     frames: [inertial, fixed]
     look: {textures: earth-realistic, atmosphere: true, clouds: true, night_lights: true}
 
+  # the Moon: radius_km is the volumetric mean radius; NASA NSSDCA Planetary Fact Sheet, https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html, read 2026-10-11.
   - id: moon
     aliases: ["Luna"]
     display: The Moon
