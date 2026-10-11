@@ -31,6 +31,7 @@ worlds:
     frames: [inertial]
     look: {textures: sun, corona: true}
 
+  # Earth: radius_km is the volumetric mean radius; NASA NSSDCA Planetary Fact Sheet, https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html, read 2026-10-11.
   - id: earth
     aliases: ["Terra", "home"]
     display: Earth
