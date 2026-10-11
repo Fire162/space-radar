@@ -52,8 +52,8 @@ museum, and a [zip that runs offline](docs/RUN_LOCALLY.md).
 - **Suggest or review a trip.** Astronomers: read one trip's narration for errors.
 - **Edit a word on GitHub**, with no tools at all: [CONTRIBUTING.md](CONTRIBUTING.md) shows how.
 - **Build a tiny space simulator** in one HTML file, in ten minutes: [docs/ADD_A_SIMULATOR.md](docs/ADD_A_SIMULATOR.md), shelf at [spaceradar.ai/lab](https://www.spaceradar.ai/lab/index.html).
-- Want a first task? Pick a [good first issue](https://github.com/Sara-Managed-Projects/space-radar/labels/good%20first%20issue).
-  Every first comment gets an answer within 48 hours.
+- Want a first task? [Pick one by what you like doing](docs/FIRST_PR.md#pick-a-task-2-minutes): the list
+  shows only the starter issues nobody has begun. Every first comment gets an answer within 48 hours.
 
 If Space Radar is useful to you, a star helps other people find it.
 
@@ -164,8 +164,8 @@ It is meant to be easy and fun.
 - **[CONTRIBUTING.md](CONTRIBUTING.md)**: recipes for a trip, an object or a layer, and the style.
   [GOVERNANCE.md](GOVERNANCE.md) says who decides; [CONTRIBUTORS.md](CONTRIBUTORS.md) says who has helped.
 
-- Start with a [good first issue](https://github.com/Sara-Managed-Projects/space-radar/labels/good%20first%20issue),
-  or something marked [help wanted](https://github.com/Sara-Managed-Projects/space-radar/labels/help%20wanted).
+- Start with a good first issue: [pick one by track](docs/FIRST_PR.md#pick-a-task-2-minutes), from the
+  ones nobody has begun. Larger work is marked [help wanted](https://github.com/Sara-Managed-Projects/space-radar/labels/help%20wanted).
 - Found a wrong number or a wrong name? A [data-accuracy report](https://github.com/Sara-Managed-Projects/space-radar/issues/new?template=data-accuracy.yml)
   with a source is gold.
 - Have an idea, or teach with it? [Tell us](https://github.com/Sara-Managed-Projects/space-radar/issues/new/choose).
