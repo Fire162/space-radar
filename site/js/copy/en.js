@@ -829,7 +829,6 @@ export const COPY = {
   // A star without a name in any catalogue people use: its HYG row is what we can say.
   stars: {
     unnamed: 'An unnamed star (HYG {n})',
-    notPlaced: '{n} more have no measured distance and are not drawn.',
   },
   // A star system at its own scale (spec 0040, scene/systems.js). The one piece of text drawn IN the
   // scene: the dashed ring on the trip's last stop is not an orbit anything has, and it says so.
@@ -2352,7 +2351,7 @@ export const GLOSSARY = {
   'low Earth orbit':
     'The busy shell from about 200 to 2000 km up. The station, most satellites and most of the debris are here.',
   geostationary:
-    'An orbit 35 786 km up where one lap takes exactly one day, so the satellite seems to hang over one spot.',
+    'An orbit 35 786 km up where one lap takes as long as the Earth takes to turn once, 23 hours 56 minutes. So the satellite seems to hang over one spot.',
   'polar orbit':
     'An orbit over the poles. The Earth turns underneath, so the satellite eventually sees every part of it.',
   elements:
