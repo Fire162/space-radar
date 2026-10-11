@@ -79,6 +79,7 @@ worlds:
     frames: [inertial, fixed]
     look: {textures: venus, atmosphere: thick}
 
+  # Mars: radius_km is the volumetric mean radius and period_h the sidereal rotation period; NASA NSSDCA Planetary Fact Sheet, https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html, read 2026-10-11.
   - id: mars
     aliases: ["the Red Planet"]
     display: Mars
