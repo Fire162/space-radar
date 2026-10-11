@@ -90,6 +90,7 @@ worlds:
     frames: [inertial, fixed]
     look: {textures: mars, atmosphere: thin}
 
+  # Jupiter: radius_km is the volumetric mean radius and period_h the sidereal rotation period; NASA NSSDCA Planetary Fact Sheet, https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html, read 2026-10-11.
   - id: jupiter
     display: Jupiter
     parent: sun
