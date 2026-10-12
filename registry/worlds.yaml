@@ -71,6 +71,7 @@ worlds:
     frames: [inertial, fixed]
     look: {textures: mercury}
 
+  # Venus: radius_km is the volumetric mean radius; NASA NSSDCA Planetary Fact Sheet, https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html, read 2026-10-12.
   - id: venus
     aliases: ["the Morning Star", "the Evening Star"]
     display: Venus
