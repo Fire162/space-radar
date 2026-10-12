@@ -344,7 +344,7 @@ export const SATURN_CONTRAST = 1.5;
 
 export const WORLDS = [
   {
-    id: 'sun', display: 'The Sun', parent: '', radiusKm: 696340.0,
+    id: 'sun', display: 'The Sun', parent: '', radiusKm: 695700.0,
     // `rotation: 'iau'` since 2026-10-06: the Sun's mesh has its north pole and turns once in 25.38
     // days (astronomy-engine's IAU axis), which scene/sun.js counts today's sunspots from.
     body: 'Sun', frame: SUN_INERTIAL, view: VIEW_TRUE, rotation: 'iau',
