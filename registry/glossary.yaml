@@ -16,6 +16,7 @@ terms:
   - {term: inclination, say: "How tilted an orbit is compared with the equator. Ninety degrees goes over the poles."}
   - {term: propagated, say: "Worked forward from an older measurement. Not a fresh observation, and it drifts."}
   - {term: lunar distance, say: "The distance from Earth to the Moon, about 384 000 km. A handy ruler for asteroid passes."}
+  # astronomical unit: about 150 million km, Earth Fact Sheet - NASA NSSDCA, https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html, read 2026-10-12.
   - {term: astronomical unit, say: "The distance from Earth to the Sun, about 150 million km."}
   - {term: light-time, say: "How long light takes to cross a distance. It is also how long a radio message takes."}
   - {term: magnitude, say: "How bright something looks. The scale runs backwards: smaller numbers are brighter."}
