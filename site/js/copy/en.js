@@ -2416,6 +2416,8 @@ export const GLOSSARY = {
   'astronomical unit': 'The distance from Earth to the Sun, about 150 million km.',
   'light-time':
     'How long light takes to cross a distance. It is also how long a radio message takes.',
+  'light-year':
+    'The distance light travels in one Julian year, about 9.46 trillion km. A ruler for the gap between stars.',
   magnitude: 'How bright something looks. The scale runs backwards: smaller numbers are brighter.',
   azimuth: 'A compass direction in degrees. Zero is north, 90 is east.',
   elevation: 'How high something is above the horizon, in degrees. Ninety is straight up.',
