@@ -1133,7 +1133,6 @@ Object.assign(COPY, {
         deniedHow: 'To allow it: reload, then choose Allow when asked.',
         none: 'No motion sensor answered here. Dragging still works.',
         unsupported: 'This browser gives no motion sensor. Dragging still works.',
-        lineUp: 'Line it up',
         lineUpWith: 'Sky off? Drag until {name} lines up.',
         lineUpPlain: 'Sky off? Drag until a bright star lines up.',
         lined: 'Lined up by hand, {n}° from the compass.',
