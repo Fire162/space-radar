@@ -1225,12 +1225,19 @@ function derivedDrawingLine(record, T, tMs) {
     // 2026-10-12 (public #938): a shape nobody published, generated from photographs and cleaned
     // here (realmodels.js `made`), says so after whatever else its line says.
     const made = entry.made && T.objectMade ? T.objectMade[entry.made] : null;
-    const said = (line) => (made ? line + COPY.punctuation.separator + made : line);
+    // 2026-10-13 (public #969): a craft drawn as it WAS (realmodels.js `was`), when what the
+    // catalogue tracks is no longer that: Hitomi, intact on the screen and a wreck in orbit.
+    const was = entry.was && T.objectWas ? T.objectWas[entry.was] : null;
+    const said = (line) => [line, made, was].filter(Boolean).join(COPY.punctuation.separator);
     if (entry.generic) return said(t(T.objectFamily, { name: String(entry.name) }));
     // A `file:` entry is somebody's model, loaded; a `build:` entry is scene/models.js working
     // from published metres. Both were printing "drawn from published dimensions", which is true
     // of one of them. See COPY.drawing.objectModel.
-    const line = t(entry.file ? T.objectModel : T.objectVariant, { name: String(entry.name) });
+    // 2026-10-13: and a file NOBODY published (`made`), worn by the craft itself and not as the
+    // kind of thing (NuSTAR, XRISM), may not say "a published model": the first look at NuSTAR's
+    // card read "drawn from a published model of NuSTAR · shape built from published dimensions".
+    // It is "drawn as NuSTAR", and the sentence after it says how the shape was made.
+    const line = t(entry.file ? (made && T.objectOwn ? T.objectOwn : T.objectModel) : T.objectVariant, { name: String(entry.name) });
     // 2026-10-07: a small body that wears a map on its shape (Ceres, Vesta) names the mosaic.
     const mapped = entry.mapped && T.objectMapped ? T.objectMapped[entry.mapped] : null;
     return said(mapped ? line + COPY.punctuation.separator + mapped : line);

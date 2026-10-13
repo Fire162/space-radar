@@ -124,20 +124,132 @@ check(!tessComet || !tessComet.file || !/tess/i.test(tessComet.file), 'C/2019 M4
 {
   const { COPY } = await import(pathToFileURL(join(ROOT, 'site/js/copy/en.js')).href);
   const { drawingLine } = await import(pathToFileURL(join(ROOT, 'site/js/ui/cards.js')).href).catch((e) => ({ drawingLine: null, why: e }));
-  const made = [...section.matchAll(/^ {2}- \{id: ([\w-]+), file: site\/models\/([\w.-]+\.glb),.*kind: derived-from-images,.*honesty: "([^"]*)"/gm)].map((m) => ({ id: m[1], file: m[2], honesty: m[3] }));
-  const copy = COPY.drawing && COPY.drawing.objectMade ? COPY.drawing.objectMade.images : null;
+  // 2026-10-13: three sentences, not one. `images` and `render` are the two a derived-from-images
+  // row may print (a photograph is not an artist's render), `dimensions` is the one a
+  // built-from-dimensions row prints; the route's `made` picks the sentence and the row must agree.
+  const made = [...section.matchAll(/^ {2}- \{id: ([\w-]+), file: site\/models\/([\w.-]+\.glb),.*kind: (derived-from-images|built-from-dimensions),.*honesty: "([^"]*)"/gm)].map((m) => ({ id: m[1], file: m[2], kind: m[3], honesty: m[4] }));
+  const sentences = (COPY.drawing && COPY.drawing.objectMade) || {};
+  const copy = sentences.images || null;
+  check(made.some((row) => row.id === 'cygnus'), 'the Cygnus row is no longer read as a made model: the pattern above has stopped matching models.yaml');
   for (const row of made) {
-    check(row.honesty === copy, `${row.id}: its row's honesty line (${JSON.stringify(row.honesty)}) is not the sentence the card prints (${JSON.stringify(copy)})`);
     const worn = routes.filter((r) => r.entry && r.entry.file === row.file);
-    check(worn.length > 0 && worn.every((r) => r.entry.made === 'images'), `${row.id}: a route to ${row.file} does not say made: 'images', so its card would not say the shape was built from photographs`);
+    check(worn.length > 0, `${row.id}: no route wears ${row.file}`);
+    for (const r of worn) {
+      const how = r.entry.made;
+      check(typeof how === 'string' && sentences[how] === row.honesty, `${row.id}: ${r.table}[${r.key}] says made: ${JSON.stringify(how)}, whose card sentence is ${JSON.stringify(sentences[how])}, and the row's honesty line is ${JSON.stringify(row.honesty)}`);
+      check((how === 'dimensions') === (row.kind === 'built-from-dimensions'), `${row.id}: made: '${how}' on a row of kind ${row.kind}`);
+    }
   }
-  for (const r of routes) if (r.entry && r.entry.made) check(made.some((row) => row.file === r.entry.file), `${r.table}[${r.key}] says made: '${r.entry.made}' and ${r.entry.file} has no derived-from-images row`);
+  for (const r of routes) if (r.entry && r.entry.made) check(made.some((row) => row.file === r.entry.file), `${r.table}[${r.key}] says made: '${r.entry.made}' and ${r.entry.file} has no row of a made kind`);
   // The Cygnus route itself: the ship gets the file, and the Swan's other namesakes do not.
   const ship = realModelFor({ id: 'sat-68689', name: 'CYGNUS NG-24', klass: 'satellite', layer: 'stations', meta: { noradId: 68689 } });
   check(ship && ship.file === 'cygnus.glb' && ship.build === 'cygnus' && ship.generic === true && ship.made === 'images', `CYGNUS NG-24 wears cygnus.glb over the procedural shape, as the kind of thing: ${JSON.stringify(ship)}`);
   for (const other of [{ id: 'exotic-cygnus-x-1', name: 'Cygnus X-1', klass: 'exotic' }, { id: 'dso-cygnus-loop', name: 'Cygnus Loop', klass: 'dso' }, { id: 'x', name: 'CYGNUS NG-24 DEB', klass: 'debris' }, { id: 'y', name: 'CYGNUSAT 1', klass: 'satellite' }]) {
     const got = realModelFor({ ...other, meta: {} });
     check(!got || got.file !== 'cygnus.glb', `${other.name} (${other.klass}) does not wear the cargo ship`);
+  }
+  // THE FIRST BATCH (2026-10-13, public #946, #964, #968, #994): each file is worn by ONE catalogue
+  // number, and the craft a careless route would give it to do not get it.
+  const sat = (norad, name, klass = 'satellite') => realModelFor({ id: `sat-${norad}`, name, klass, layer: 'active', meta: { noradId: norad } });
+  // THE SECOND BATCH (2026-10-13, public #947, #969; NOAA 21 rebuilt from dimensions): Hitomi, Ajisai
+  // and the two LAGEOS by number, as themselves.
+  for (const [norad, name, file, how] of [[57800, 'XRISM', 'xrism.glb', 'render'], [54234, 'NOAA 21 (JPSS-2)', 'noaa21.glb', 'dimensions'], [10967, 'SEASAT 1', 'seasat.glb', 'render'], [38358, 'NUSTAR', 'nustar.glb', 'dimensions'],
+    [41337, 'ASTRO-H (HITOMI)', 'hitomi.glb', 'render'], [16908, 'AJISAI (EGS)', 'ajisai.glb', 'dimensions'], [8820, 'LAGEOS 1', 'lageos.glb', 'dimensions'], [22195, 'LAGEOS 2', 'lageos.glb', 'dimensions'],
+    // THE THIRD BATCH (2026-10-13): the other laser-ranging balls, each from its own ILRS page.
+    [7646, 'STARLETTE', 'starlette.glb', 'dimensions'], [22824, 'STELLA', 'starlette.glb', 'dimensions'], [38077, 'LARES', 'lares.glb', 'dimensions'], [53105, 'LARES-2', 'lares2.glb', 'dimensions'],
+    [19751, 'COSMOS 1989 (ETALON 1)', 'etalon.glb', 'dimensions'], [20026, 'COSMOS 2024 (ETALON 2)', 'etalon.glb', 'dimensions'], [25398, 'WESTPAC', 'westpac.glb', 'dimensions'],
+    // THE FOURTH BATCH (2026-10-13, public #953, #954, #965): three NASA craft built from dimensions.
+    [65053, 'NISAR', 'nisar.glb', 'dimensions'], [49954, 'IXPE', 'ixpe.glb', 'dimensions'], [58928, 'PACE', 'pace.glb', 'dimensions']]) {
+    const got = sat(norad, name);
+    check(got && got.file === file && got.made === how && !got.generic, `${name} (${norad}) wears ${file}, made: '${how}', as itself: ${JSON.stringify(got)}`);
+  }
+  for (const [norad, name, file, klass] of [
+    [43013, 'NOAA 20 (JPSS-1)', 'noaa21.glb'],   // a different bus: NASA's Suomi model
+    [33591, 'NOAA 19', 'noaa21.glb'],            // the POES bus
+    [41337, 'ASTRO-H (HITOMI)', 'xrism.glb'],    // the same bus with an optical bench this file lacks
+    [44322, 'RCM-1', 'seasat.glb'],              // the other radar satellites keep the generic build
+    [99001, 'SEASAT 1 DEB', 'seasat.glb', 'debris'],
+    [99002, 'NUSTAR DEB', 'nustar.glb', 'debris'],
+    [99003, 'XRISM R/B', 'xrism.glb', 'rocket'],
+    [57800, 'XRISM', 'hitomi.glb'],              // XRISM has no extensible bench: it keeps its own file
+    [7646, 'STARLETTE', 'lageos.glb'],           // every ball wears its OWN surface (batch three), never another's:
+    [38077, 'LARES', 'lageos.glb'],
+    [38077, 'LARES', 'lares2.glb'],              // LARES and LARES-2 are two balls of two sizes and two arrays
+    [53105, 'LARES-2', 'lares.glb'],
+    [52307, 'STARLINK-3755', 'lares2.glb'],      // the id LARES-2 is often given is a Starlink
+    [19751, 'COSMOS 1989 (ETALON 1)', 'ajisai.glb'],
+    [27944, 'LARETS', 'westpac.glb'],            // no page read gives Larets's arrangement: it has no file
+    [27944, 'LARETS', 'starlette.glb'],
+    [60533, 'LEMUR-2-STELLA', 'starlette.glb'],  // a CubeSat with Stella in its name is not the ball
+    [99004, 'ASTRO-H DEB', 'hitomi.glb', 'debris'],  // Hitomi's fragments stay fragments
+    [38358, 'NUSTAR', 'ixpe.glb'],               // two X-ray telescopes on a mast, two files (batch four)
+    [49954, 'IXPE', 'nustar.glb'],
+    [99007, 'PACE', 'pace.glb'],                 // a name is not the route: only catalogue number 58928 is NASA's PACE
+    [99008, 'SWOT', 'swot.glb'],
+    [39634, 'SENTINEL-1A', 'nisar.glb'],         // a radar satellite with a flat blade is not the mesh reflector
+    [46984, 'SENTINEL-6A', 'swot.glb'],          // the other altimeter keeps NASA's model of itself
+    [99005, 'SOYUZ-MS 29 DEB', 'soyuz-ms.glb', 'debris'],
+    [99006, 'SL-4 R/B', 'soyuz-ms.glb', 'rocket'],   // the Soyuz ROCKET's stage is not the ship
+  ]) {
+    const got = sat(norad, name, klass || 'satellite');
+    check(!got || got.file !== file, `${name} (${norad}) does not wear ${file}`);
+  }
+  // SWOT is JPL's OWN published model (public #952): its file, as itself, and NOT `made`: nobody here made it.
+  {
+    const swot = sat(54754, 'SWOT');
+    check(swot && swot.file === 'swot.glb' && !swot.made && !swot.generic && swot.axes === 'app', `SWOT (54754) wears swot.glb as a published model of itself, turned to the app's axes: ${JSON.stringify(swot)}`);
+    for (const n of [65053, 49954, 58928]) check(sat(n, 'X').axes === 'app', `${n} flies in the app's axes`);
+  }
+  if (typeof drawingLine === 'function') {
+    const line = drawingLine({ id: 'sat-57800', name: 'XRISM', klass: 'satellite', layer: 'visual', meta: { noradId: 57800 } }, Date.UTC(2026, 9, 13));
+    check(typeof line === 'string' && line.startsWith('drawn as XRISM') && line.includes(sentences.render) && !/published model/.test(line), `XRISM's card says it is drawn as XRISM from an artist's render, and not from a published model: ${JSON.stringify(line)}`);
+    const nu = drawingLine({ id: 'sat-38358', name: 'NUSTAR', klass: 'satellite', layer: 'notable', meta: { noradId: 38358 } }, Date.UTC(2026, 9, 13));
+    const sw = drawingLine({ id: 'sat-54754', name: 'SWOT', klass: 'satellite', layer: 'active', meta: { noradId: 54754 } }, Date.UTC(2026, 9, 13));
+    check(typeof sw === 'string' && /published model of SWOT/.test(sw) && !sw.includes(sentences.dimensions), `SWOT's card says it is drawn from a published model, and not that it was built here: ${JSON.stringify(sw)}`);
+    const ni = drawingLine({ id: 'sat-65053', name: 'NISAR', klass: 'satellite', layer: 'active', meta: { noradId: 65053 } }, Date.UTC(2026, 9, 13));
+    check(typeof ni === 'string' && ni.startsWith('drawn as NISAR') && ni.includes(sentences.dimensions) && !/published model/.test(ni), `NISAR's card says it was built from dimensions: ${JSON.stringify(ni)}`);
+    check(typeof nu === 'string' && nu.startsWith('drawn as NuSTAR') && nu.includes(sentences.dimensions) && !/published model/.test(nu), `NuSTAR's card says it was built from dimensions, and not that somebody published it: ${JSON.stringify(nu)}`);
+  }
+  // The Soyuz: by name, on the stations layer, over its build, as the kind of thing (the Cygnus's pattern).
+  const soyuz = realModelFor({ id: 'sat-100057', name: 'SOYUZ-MS 29', klass: 'station', layer: 'stations', meta: { noradId: 100057 } });
+  check(soyuz && soyuz.file === 'soyuz-ms.glb' && soyuz.build === 'soyuz' && soyuz.generic === true && soyuz.made === 'dimensions', `SOYUZ-MS 29 wears soyuz-ms.glb over the procedural Soyuz, as the kind of thing: ${JSON.stringify(soyuz)}`);
+  // THE THIRD BATCH: the Progress has a file of its own, and the two are never swapped.
+  const progress = realModelFor({ id: 'sat-68837', name: 'PROGRESS-MS 34', klass: 'station', layer: 'stations', meta: { noradId: 68837 } });
+  check(progress && progress.file === 'progress-ms.glb' && progress.build === 'progress' && progress.generic === true && progress.made === 'dimensions', `PROGRESS-MS 34 wears progress-ms.glb over the procedural Progress, and not the crewed ship: ${JSON.stringify(progress)}`);
+  check(soyuz.file !== 'progress-ms.glb', 'a Soyuz is not drawn as a Progress');
+  // The other visiting vehicles of the batch, each by name on the stations layer, over its own build,
+  // as the kind of thing; and what must NOT wear each.
+  const visit = (name, klass = 'satellite', layer = 'stations') => realModelFor({ id: 'sat-9', name, klass, layer, meta: { noradId: 9 } });
+  for (const [name, file, build] of [['CREW DRAGON 13', 'dragon-crew.glb', 'dragon'], ['DRAGON CRS-33', 'dragon-cargo.glb', 'dragon-cargo'], ['SHENZHOU-23 (SZ-23)', 'shenzhou.glb', 'shenzhou'], ['TIANZHOU-10', 'tianzhou.glb', 'tianzhou'], ['PROGRESS-MS 35', 'progress-ms.glb', 'progress']]) {
+    for (const klass of ['station', 'satellite']) {
+      const got = visit(name, klass);
+      check(got && got.file === file && got.build === build && got.generic === true && got.made === 'dimensions' && got.axes === 'app', `${name} (klass ${klass}) wears ${file} over the build ${build}, as the kind of thing: ${JSON.stringify(got)}`);
+    }
+    const deb = visit(name + ' DEB', 'debris', 'active');
+    check(!deb || !deb.file, `${name} DEB is debris and wears no ship's file: ${JSON.stringify(deb)}`);
+  }
+  for (const [name, file, klass] of [['CREW DRAGON 13', 'dragon-cargo.glb'], ['DRAGON CRS-33', 'dragon-crew.glb'], ['SHENZHOU-23 (SZ-23)', 'tianzhou.glb'], ['TIANZHOU-10', 'shenzhou.glb'], ['SHENZHOU-23 (SZ-23)', 'soyuz-ms.glb'],
+    ['CSS (TIANHE)', 'tianzhou.glb', 'station'], ['CZ-2F R/B', 'shenzhou.glb', 'rocket'], ['FALCON 9 R/B', 'dragon-crew.glb', 'rocket'], ['DRAGONFLY', 'dragon-crew.glb'], ['SNAPDRAGON', 'dragon-cargo.glb']]) {
+    const got = visit(name, klass || 'satellite');
+    check(!got || got.file !== file, `${name} does not wear ${file}: ${JSON.stringify(got && got.file)}`);
+  }
+  // `axes: 'app'` only on files built to the app's axes HERE (scene/heroes.js then keeps the build's
+  // attitude): never on a published mesh, whose axes say nothing about which way the craft points.
+  // 2026-10-13, batch four: ONE OTHER CASE. A published mesh that was TURNED to the app's axes before its
+  // bake, as one piece, may say it too, and only when its registry row's `modified:` says so in these
+  // words (SWOT, JPL's own model: the altimeter's dish put on +Z, the wings along X).
+  const turnedHere = (file) => yaml.split('\n').some((line) => line.includes(`file: site/models/${file},`) && /turned as one piece so that the file's [-xyz, ]+ are the app's \+X, \+Y, \+Z/.test(line));
+  for (const r of routes) if (r.entry && r.entry.axes !== undefined) check(r.entry.axes === 'app' && (!!r.entry.made || turnedHere(r.entry.file)), `${r.table}[${r.key}] says axes: ${JSON.stringify(r.entry.axes)}; only a file made here (made:), or a published one whose row says it was turned to the app's axes, may say axes: 'app'`);
+  check(!turnedHere('hubble.glb') && turnedHere('swot.glb'), 'the turned-here rule reads the registry: Hubble was not turned, SWOT was');
+  if (typeof drawingLine === 'function') {
+    // HITOMI IS DRAWN WHOLE AND IS A WRECK: its card must say so, after how the shape was made.
+    const h = drawingLine({ id: 'sat-41337', name: 'ASTRO-H (HITOMI)', klass: 'satellite', layer: 'visual', meta: { noradId: 41337 } }, Date.UTC(2026, 9, 13));
+    const was = COPY.drawing.objectWas && COPY.drawing.objectWas.hitomi;
+    check(typeof was === 'string' && /broke apart/.test(was) && /main body/.test(was), `COPY.drawing.objectWas.hitomi says the craft broke apart and what is tracked is its main body: ${JSON.stringify(was)}`);
+    check(typeof h === 'string' && h.startsWith('drawn as Hitomi') && h.includes(sentences.render) && h.endsWith(was), `Hitomi's card says it is drawn as Hitomi, from a render, and that it is shown whole though it broke apart: ${JSON.stringify(h)}`);
+    for (const r of routes) if (r.entry && r.entry.was !== undefined) check(typeof (COPY.drawing.objectWas || {})[r.entry.was] === 'string', `${r.table}[${r.key}] says was: '${r.entry.was}', and COPY.drawing.objectWas has no such sentence`);
+    const lg = drawingLine({ id: 'sat-8820', name: 'LAGEOS 1', klass: 'satellite', layer: 'active', meta: { noradId: 8820 } }, Date.UTC(2026, 9, 13));
+    check(typeof lg === 'string' && lg.startsWith('drawn as LAGEOS') && lg.includes(sentences.dimensions) && !/kind of thing/.test(lg), `LAGEOS 1's card says it is drawn as LAGEOS, built from dimensions: ${JSON.stringify(lg)}`);
   }
   if (made.length && typeof drawingLine === 'function') {
     const line = drawingLine({ id: 'sat-68689', name: 'CYGNUS NG-24', klass: 'satellite', layer: 'stations', meta: { noradId: 68689 } }, Date.UTC(2026, 9, 12));
