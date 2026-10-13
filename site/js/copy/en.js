@@ -1266,7 +1266,6 @@ export const COPY = {
         depression: 'tropical depression',
       },
       stormAlert: { green: 'green', orange: 'orange', red: 'red' },
-      kmPerS: '{n} km/s',
       // The days first, so the card's three numbers read the count and not the day of the month.
       launchedAgo: '{n} days ago, on {date}',
       au: '{n} astronomical units',
