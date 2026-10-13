@@ -125,7 +125,7 @@ const CONTRACT = {
   'scene/worldlights.js': ['createWorldLights', 'planetMagnitude', 'moonMagnitude', 'reflectedMagnitude', 'lambertPhase', 'apparentMagnitude', 'starSprite', 'discFade', 'discCover', 'GEOMETRIC_ALBEDO', 'LIGHT_FADE_PX', 'SUN_APPARENT_MAG', 'WORLDLIGHT_VERT', 'WORLDLIGHT_FRAG'],
   // The device tiers (2026-09-28): the tier is chosen in quality.js, the maps swapped by
   // texturetiers.js from the mirror of registry/textures.yaml.
-  'scene/quality.js': ['createFrameLatch', 'shouldSaveData', 'chooseTier', 'createTierPromoter', 'createIdleGate', 'idleCapWanted', 'movingReasons'],
+  'scene/quality.js': ['createFrameLatch', 'shouldSaveData', 'chooseTier', 'createTierPromoter', 'createIdleGate', 'idleCapWanted', 'lookHeld', 'movingReasons'],
   // Spec 0053 task 3: the aurora shell, its JS twins (tests/test_aurora.mjs), and the OVATION decode.
   'scene/aurora.js': ['createAurora', 'auroraRightNow', 'auroraLine', 'AURORA_FRAG', 'nightMask', 'probabilityToEmission', 'auroraColour', 'profile', 'profileIntegral', 'maxDotOnArc', 'gridUv', 'reachLatDeg', 'TIER_STEPS', 'EMISSIONS', 'NIGHT'],
   'data/ovation.js': ['OVATION_URL', 'parseOvation', 'upsampleGrid', 'summarize', 'auroraMode', 'nextLookMs', 'mayLook', 'REFRESH_MS', 'START_DELAY_MS', 'HOLD_MS'],
@@ -2964,7 +2964,7 @@ for (const file of allFiles) {
   for (const f of ['wind.js', 'currents.js']) {
     const src = readFileSync(join(JS, 'scene', f), 'utf8');
     const hit = quadWords(src);
-    if (hit.length) problems.push(`QUAD     scene/${f} draws a screen-covering pass (${hit.join(', ')}): a streak layer is LineSegments on the Earth's frame (internal #146)`);
+    if (hit.length) problems.push(`QUAD     scene/${f} draws a screen-covering pass (${hit.join(', ')}): a streak layer is lines or thin ribbons on the Earth's frame (internal #146)`);
   }
   notes.push('quad: scene/wind.js and scene/currents.js are lines, not a full-screen pass (and the check fails on a scratch quad)');
 }
