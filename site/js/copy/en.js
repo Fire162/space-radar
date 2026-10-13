@@ -1238,7 +1238,6 @@ export const COPY = {
       // would say we tried and failed at arithmetic; the truth is that nobody has ever known.
       whereabouts: 'Where it is',
       lastSeen: 'Last known',
-      toFindOut: 'To find out',
       // A tropical cyclone (2026-09-28, data/parsers.js parseGdacsCyclones says what each number is).
       stormNow: 'At the latest advisory',
       stormWind: 'Strongest wind on its track',
