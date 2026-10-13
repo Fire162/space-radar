@@ -20,6 +20,7 @@ terms:
   # astronomical unit: about 150 million km, Earth Fact Sheet - NASA NSSDCA, https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html, read 2026-10-12.
   - {term: astronomical unit, say: "The distance from Earth to the Sun, about 150 million km."}
   - {term: light-time, say: "How long light takes to cross a distance. It is also how long a radio message takes."}
+  - {term: light-year, say: "The distance light travels in one Julian year, about 9.46 trillion km. A ruler for the gap between stars."}
   - {term: magnitude, say: "How bright something looks. The scale runs backwards: smaller numbers are brighter."}
   - {term: azimuth, say: "A compass direction in degrees. Zero is north, 90 is east."}
   - {term: elevation, say: "How high something is above the horizon, in degrees. Ninety is straight up."}
