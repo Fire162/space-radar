@@ -1163,7 +1163,6 @@ export const COPY = {
     rightNowLabel: 'Right now',
     seeItLabel: 'See it from here',
     actionsLabel: 'What you can do',
-    sourceLabel: 'Where this comes from',
     unknownName: 'Unnamed object',
     // A record whose klass matches none of COPY.klass -- a bad feed row, a typo in a registry
     // entry -- has no template to build a sentence from. The card used to borrow the satellite
