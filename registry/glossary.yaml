@@ -30,6 +30,7 @@ terms:
   - {term: close approach, say: "When an asteroid passes near Earth. Near in astronomy usually means further than the Moon."}
   - {term: near-Earth object, say: "An asteroid or comet whose orbit brings it close to Earth's."}
   - {term: reentry, say: "When something falls back into the atmosphere. Most of it burns up on the way down."}
+  # debris: more than 25,000 objects larger than 10 cm are tracked by the U.S. Space Surveillance Network; NASA Orbital Debris Program Office FAQ, https://orbitaldebris.jsc.nasa.gov/faq/, read 2026-10-11.
   - {term: debris, say: "Dead satellites, spent rocket stages and fragments. Tens of thousands of pieces are tracked."}
   - {term: constellation, say: "A pattern of stars people named long ago. The stars in one are usually nowhere near each other."}
   - {term: L1, say: "A balance point between the Earth and the Sun, about 1.5 million km sunward. Good for watching the Sun."}
