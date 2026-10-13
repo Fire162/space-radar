@@ -1331,10 +1331,6 @@ export const COPY = {
       flyNowhere: 'There is no position for this object at this moment',
       seeFromHere: 'See it from here',
       seeFromHereTitle: 'Look up from your own place on Earth',
-      tellMeBefore: 'Tell me before',
-      // Honest, because the feature does not exist yet (specs 0015 and 0016).
-      tellMeBeforeDisabled:
-        'Reminders are not built yet. There is no sign-up and no email behind this button, so it is switched off rather than pretending.',
       // The card view's one row of four (spec 0061 §4, docs/ui-guide.md §3.10). Two words at most
       // on a button; the title says the rest.
       follow: 'Follow',
