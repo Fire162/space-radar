@@ -1163,7 +1163,6 @@ export const COPY = {
     rightNowLabel: 'Right now',
     seeItLabel: 'See it from here',
     actionsLabel: 'What you can do',
-    sourceLabel: 'Where this comes from',
     unknownName: 'Unnamed object',
     // A record whose klass matches none of COPY.klass -- a bad feed row, a typo in a registry
     // entry -- has no template to build a sentence from. The card used to borrow the satellite
@@ -1237,7 +1236,6 @@ export const COPY = {
       // would say we tried and failed at arithmetic; the truth is that nobody has ever known.
       whereabouts: 'Where it is',
       lastSeen: 'Last known',
-      toFindOut: 'To find out',
       // A tropical cyclone (2026-09-28, data/parsers.js parseGdacsCyclones says what each number is).
       stormNow: 'At the latest advisory',
       stormWind: 'Strongest wind on its track',
@@ -2298,8 +2296,6 @@ export const COPY = {
     layerCountLabel: '{n} shown',
     sourcesEmpty: 'No sources have been declared.',
     notAsked: '{n} more sources are read only when a layer that needs them is switched on.',
-    refresh: 'Read again',
-    refreshTitle: 'Ask every source that is due for a fresh copy',
   },
 
   time: {
@@ -2417,6 +2413,8 @@ export const GLOSSARY = {
   'astronomical unit': 'The distance from Earth to the Sun, about 150 million km.',
   'light-time':
     'How long light takes to cross a distance. It is also how long a radio message takes.',
+  'light-year':
+    'The distance light travels in one Julian year, about 9.46 trillion km. A ruler for the gap between stars.',
   magnitude: 'How bright something looks. The scale runs backwards: smaller numbers are brighter.',
   azimuth: 'A compass direction in degrees. Zero is north, 90 is east.',
   elevation: 'How high something is above the horizon, in degrees. Ninety is straight up.',
