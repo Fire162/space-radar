@@ -35,6 +35,7 @@ terms:
   # debris: more than 25,000 objects larger than 10 cm are tracked by the U.S. Space Surveillance Network; NASA Orbital Debris Program Office FAQ, https://orbitaldebris.jsc.nasa.gov/faq/, read 2026-10-11.
   - {term: debris, say: "Dead satellites, spent rocket stages and fragments. Tens of thousands of pieces are tracked."}
   - {term: constellation, say: "A pattern of stars people named long ago. The stars in one are usually nowhere near each other."}
+  # L1: 1.5 million km from Earth towards the Sun, Orbit - NASA Science, https://science.nasa.gov/mission/webb/orbit/, read 2026-10-12.
   - {term: L1, say: "A balance point between the Earth and the Sun, about 1.5 million km sunward. Good for watching the Sun."}
   # L2: 1.5 million km from Earth, Orbit - NASA Science, https://science.nasa.gov/mission/webb/orbit/, read 2026-10-11.
   - {term: L2, say: "A balance point 1.5 million km from Earth on the side away from the Sun, where a telescope can keep the Earth and Sun behind it and stay cold."}
