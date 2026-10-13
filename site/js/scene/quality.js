@@ -78,7 +78,7 @@ export function createFrameLatch(opts = {}) {
 
 // --- the resolution scale before the latch (internal #521, 2026-10-10) -----------------------------------
 //
-// THE MEASURED PROBLEM (docs/performance-research-2026-10-09.md section 4): one stall, another tab loading,
+// THE MEASURED PROBLEM (measured 2026-10-09): one stall, another tab loading,
 // tripped the latch for good, and the visit lost relief, earthshine, the tiles and the 4k maps. THE STEP
 // IN BETWEEN: a ladder of pixel ratios, 2, 1.5, 1.25, 1 (never above the device's own, nor above
 // MAX_DPR in scene/renderer.js). The same test that trips the latch (a 20-frame median over 33 ms for
