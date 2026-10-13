@@ -1604,12 +1604,29 @@ export const COPY = {
       dawn: 'its surface is the Dawn spacecraft’s black-and-white mosaic, tinted in a grey we chose; the shadows in its craters are the ones Dawn photographed and do not move with the Sun here',
     },
     objectFamily: 'drawn as {name} — the kind of thing, not this exact one',
+    // A file made here, worn by the craft it is of (scene/realmodels.js `made`, not `generic`):
+    // not "a published model", which it is not; COPY.drawing.objectMade follows it.
+    objectOwn: 'drawn as {name}',
     // 2026-10-12 (public #938): a model nobody published (scene/realmodels.js `made`). `images`: an
     // image-to-3D model generated the mesh from photographs and we cleaned it. The words are the
     // registry row's own `honesty:` (registry/models.yaml, kind derived-from-images), and
     // tests/test_real_models.mjs fails if the two ever differ.
+    // 2026-10-13: `render`, the same road from an agency's own artist's render where no photograph
+    // of the craft in orbit exists (Seasat, XRISM, NOAA-21), and `dimensions`, a shape built here
+    // in code from cited metres with pictures looked at for the rest (NuSTAR; registry kind
+    // built-from-dimensions).
     objectMade: {
       images: 'shape built from photographs; proportions approximate',
+      render: 'shape built from an artist’s render; proportions approximate',
+      dimensions: 'shape built from published dimensions and pictures; details simplified',
+    },
+    // 2026-10-13 (public #969): a craft drawn as it was, not as it is (scene/realmodels.js `was`).
+    // Hitomi spun itself apart on 26 March 2016; catalogue object 41337 is its main body, and JAXA
+    // found it highly likely that both solar paddles had broken off at their bases
+    // (global.jaxa.jp/press/2016/04/20160428_hitomi.html, read 2026-10-13). The model is the craft
+    // as launched, so the card says what is really up there.
+    objectWas: {
+      hitomi: 'shown whole, as launched in February 2016; it broke apart five weeks later, and what is tracked here is its main body without the solar paddles',
     },
     objectGeneric: 'drawn as a generic object; we have no shape for {name}',
     // The procedural shape a class falls back to when nothing more specific is known. Used

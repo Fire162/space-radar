@@ -145,9 +145,67 @@ export const REAL_MODELS = {
     // "a space telescope -- the kind of thing, not this exact one", which is now true of the shape.
     3597: { build: 'space-telescope', colour: 'telescope', name: 'a space telescope', catalogue: 'OAO 2', generic: true },
     6153: { build: 'space-telescope', colour: 'telescope', name: 'a space telescope', catalogue: 'OAO 3 (COPERNICUS)', generic: true },
-    41337: { build: 'space-telescope', colour: 'telescope', name: 'a space telescope', catalogue: 'ASTRO-H (HITOMI)', generic: true },
+    // HITOMI HAS ITS OWN SHAPE since 2026-10-13 (public #969): hitomi.glb is XRISM's generated body
+    // (the same bus: XRISM is Hitomi's recovery mission) with what XRISM does not have built in
+    // code from cited metres: the 6.4 m extensible optical bench as a lattice, the HXI plate at its
+    // end, the two soft gamma-ray detectors (registry/models.yaml row `hitomi`).
+    // THE CATALOGUE OBJECT IS WHAT IS LEFT OF IT. Hitomi spun itself apart on 26 March 2016, five
+    // weeks after launch; 41337 is its main body, and JAXA's own finding is that both solar paddles
+    // broke off at their bases. The file is the craft AS LAUNCHED, which is what the issue asks
+    // for, so `was: 'hitomi'` makes the card say that in a sentence of its own
+    // (COPY.drawing.objectWas): an intact telescope may not be drawn on a wreck without saying so.
+    41337: { build: 'space-telescope', file: 'hitomi.glb', colour: 'telescope', name: 'Hitomi (ASTRO-H)', catalogue: 'ASTRO-H (HITOMI)', made: 'render', was: 'hitomi', axes: 'app' },
     42758: { build: 'space-telescope', colour: 'telescope', name: 'a space telescope', catalogue: 'HXMT (HUIYAN)', generic: true },
-    57800: { build: 'space-telescope', colour: 'telescope', name: 'a space telescope', catalogue: 'XRISM', generic: true },
+    // XRISM's own shape since 2026-10-13 (public #968): xrism.glb, GENERATED from two frames of NASA
+    // Goddard's turntable render and its two solar paddles then REPLACED by flat ones built in code
+    // (registry/models.yaml row `xrism`). The build stays as what is drawn while the file is on its
+    // way. Not `generic` any more: it is this craft, and `made: 'render'` makes the card say the
+    // shape came from an artist's render. Hitomi (41337) above does not wear it: the same bus with a
+    // six-metre optical bench, which since batch two is a file of its own (public #969).
+    // `axes: 'app'` since batch three (2026-10-13): the file was built to the app's axes (mirrors at
+    // -Z, away from the Earth; paddles along X; cells toward +Y) and flew at the seeded constant
+    // angle every loaded file had, its paddles' backs to the Sun. Now it flies as its build did.
+    57800: { build: 'space-telescope', file: 'xrism.glb', colour: 'telescope', name: 'XRISM', catalogue: 'XRISM', made: 'render', axes: 'app' },
+    // THE FIRST BATCH OF THE "3D model:" ISSUES (2026-10-13). NuSTAR had no route at all: on the layer
+    // of satellites worth knowing it was the generic satellite, a box with a dish, and it is two small
+    // boxes ten metres apart on a lattice mast, which is the whole of what a person recognises
+    // (public #964). nustar.glb was BUILT HERE, in code, from the cited metres and NASA/JPL's render
+    // (registry/models.yaml row `nustar`, kind `built-from-dimensions`; no image-to-3D model can draw
+    // a lattice). `made: 'dimensions'` is what makes the card say so. Not `generic`: it is this craft.
+    // `axes: 'app'` since batch three: the mast stands on the local vertical, the optics at -Z looking
+    // away from the Earth and the bus at +Z. NOT AS IT FLIES: the real craft points its mast at
+    // whatever it observes; the app knows no target, and "away from the Earth" is its telescope rule.
+    38358: { file: 'nustar.glb', colour: 'telescope', name: 'NuSTAR', catalogue: 'NUSTAR', made: 'dimensions', axes: 'app' },
+    // THE FOURTH BATCH (2026-10-13, public #952, #953, #954, #965): four NASA craft that had no route
+    // and were the generic satellite, a box with a dish. Each BY NUMBER, with the name CelesTrak's
+    // active group gives it (read in the live saved data, data/v1/celestrak-active.cols.json, that
+    // day: `SWOT`, `NISAR`, `IXPE`, `PACE`); none is in the visual group, so each is met in the whole
+    // catalogue. A name route would be wrong for all four: `PACE` is a word inside other names and
+    // was also a 2U CubeSat, and `SWOT` and `IXPE` are short enough to be inside anything.
+    //   SWOT   JPL'S OWN PUBLISHED MODEL (swot.jpl.nasa.gov/resources/86/swot-3d-model/, 2020), so no
+    //          `made`: the card says "drawn from a published model of SWOT". Turned to the app's axes
+    //          before the bake (the altimeter's dish on +Z, the wings along X), hence `axes: 'app'`.
+    //   NISAR  built in code from JPL's cited metres. The 12 m reflector is a rim truss and a net,
+    //          NEVER a filled disc: the real one is a see-through mesh. The boom stands on the side
+    //          away from the Earth; the real craft flies rolled, which the app's one attitude cannot say.
+    //   IXPE   built in code: bus, 4 m lattice boom, three mirror modules at -Z looking away from the
+    //          Earth (the telescope rule, as XRISM and NuSTAR). It is not NuSTAR's mast and does not wear it.
+    //   PACE   built in code: the 1.5 x 1.5 x 3.2 m observatory, the Ocean Color Instrument and its
+    //          Earth shield, one wing.
+    // registry/models.yaml rows `swot`, `nisar`, `ixpe`, `pace` have the sources and what is approximate.
+    54754: { file: 'swot.glb', colour: 'satellite', name: 'SWOT', catalogue: 'SWOT', axes: 'app' },
+    65053: { file: 'nisar.glb', colour: 'satellite', name: 'NISAR', catalogue: 'NISAR', made: 'dimensions', axes: 'app' },
+    49954: { file: 'ixpe.glb', colour: 'telescope', name: 'IXPE', catalogue: 'IXPE', made: 'dimensions', axes: 'app' },
+    58928: { file: 'pace.glb', colour: 'satellite', name: 'PACE', catalogue: 'PACE', made: 'dimensions', axes: 'app' },
+    // NOAA 21 (JPSS-2), public #994. By NUMBER and only this number: NOAA 20 is a different bus and
+    // wears NASA's Suomi model (43013, below); the name route's comment further down says why NOAA 21
+    // was left on the generic shape until it had one of its own. noaa21.glb: the body generated from
+    // NOAA's render with the body cut out by hand, the five-panel wing built in code.
+    // REBUILT the same day (batch two): the generated body was 4 m of lumps with no instrument on it.
+    // The file is now built from dimensions alone, a box bus with VIIRS, CrIS, ATMS and OMPS as boxes
+    // of their cited sizes where NOAA's drawing of the nadir deck puts them, so `made: 'dimensions'`.
+    // `axes: 'app'`: the instruments are on the file's +Z, and the app turns that face to the Earth.
+    54234: { file: 'noaa21.glb', colour: 'satellite', name: 'NOAA-21 (JPSS-2)', catalogue: 'NOAA 21 (JPSS-2)', made: 'dimensions', axes: 'app' },
     20580: { file: 'hubble.glb', colour: 'telescope', name: 'Hubble Space Telescope', catalogue: 'HST' },
     25682: { file: 'landsat.glb', colour: 'satellite', name: 'Landsat 7', catalogue: 'LANDSAT 7' },
     // NASA's own Landsat 8, since 2026-10-05. Both were drawn with the Landsat 7 model, which is a
@@ -344,7 +402,13 @@ export const REAL_MODELS = {
     // because RISAT-1 flew a PLANAR active array and would take the umbrella if it ever returned
     // to the catalogue. A key that is right about every object that exists today and wrong about
     // one that might is a key worth not writing.
-    10967: { build: 'radar', colour: 'satellite', name: 'a radar-imaging satellite', catalogue: 'SEASAT 1', generic: true },
+    // SEASAT HAS ITS OWN SHAPE since 2026-10-13 (public #946): an Agena stage 21 m long with the first
+    // radar antenna flown in orbit hung off its side, which is nothing like the bus-and-blade the
+    // `radar` build draws for RCM. seasat.glb: the trunk generated from JPL's artist's concept, the
+    // wings, the antenna, the sticks and the dishes built in code. The build is what is drawn first.
+    // `axes: 'app'` since batch three: the sensor module and its antennas are on the file's +Z, which
+    // the app turns to the Earth, as the craft flew (the Agena's engine to the zenith).
+    10967: { build: 'radar', file: 'seasat.glb', colour: 'satellite', name: 'Seasat', catalogue: 'SEASAT 1', made: 'render', axes: 'app' },
     44322: { build: 'radar', colour: 'satellite', name: 'a radar-imaging satellite', catalogue: 'RCM-1', generic: true },
     44323: { build: 'radar', colour: 'satellite', name: 'a radar-imaging satellite', catalogue: 'RCM-3', generic: true },
     44324: { build: 'radar', colour: 'satellite', name: 'a radar-imaging satellite', catalogue: 'RCM-2', generic: true },
@@ -380,16 +444,45 @@ export const REAL_MODELS = {
     // FLASHES as it rotates, which is why a person outside can see it.
     // Etalon 1 and 2 are catalogued as COSMOS 1989 and COSMOS 2024, which is one more reminder
     // that a COSMOS number says nothing about what the spacecraft is.
-    // LARES-2 is NOT here: the id it is often given, 52307, is STARLINK-3755.
-    16908: { build: 'sphere', colour: 'satellite', name: 'a laser-ranging sphere', catalogue: 'AJISAI (EGS)', generic: true },
-    8820: { build: 'sphere', colour: 'satellite', name: 'a laser-ranging sphere', catalogue: 'LAGEOS 1', generic: true },
-    22195: { build: 'sphere', colour: 'satellite', name: 'a laser-ranging sphere', catalogue: 'LAGEOS 2', generic: true },
-    7646: { build: 'sphere', colour: 'satellite', name: 'a laser-ranging sphere', catalogue: 'STARLETTE', generic: true },
-    22824: { build: 'sphere', colour: 'satellite', name: 'a laser-ranging sphere', catalogue: 'STELLA', generic: true },
-    38077: { build: 'sphere', colour: 'satellite', name: 'a laser-ranging sphere', catalogue: 'LARES', generic: true },
-    19751: { build: 'sphere', colour: 'satellite', name: 'a laser-ranging sphere', catalogue: 'COSMOS 1989 (ETALON 1)', generic: true },
-    20026: { build: 'sphere', colour: 'satellite', name: 'a laser-ranging sphere', catalogue: 'COSMOS 2024 (ETALON 2)', generic: true },
-    25398: { build: 'sphere', colour: 'satellite', name: 'a laser-ranging sphere', catalogue: 'WESTPAC', generic: true },
+    // LARES-2 had no row here until batch three: the id it is often given, 52307, is STARLINK-3755.
+    //
+    // AJISAI AND THE TWO LAGEOS HAVE THEIR OWN SURFACES since 2026-10-13 (public #947): the surface
+    // is the whole of what these are. Both files were built in code, with no generator (registry
+    // rows `ajisai` and `lageos`, kind `built-from-dimensions`). lageos.glb: a 60 cm ball with 426
+    // cube corners, each ring at its published colatitude with its published count; LAGEOS 2 is
+    // "an identical S/C" (eoPortal), so the two wear one file. ajisai.glb: 2.15 m, 318 flat mirrors
+    // and 120 reflector panels of 1 436 cubes; the counts are published and the placement is not,
+    // and the row says so. Not `generic` any more. The other six balls keep the one shape: nobody
+    // had built their surfaces then (batch three did, below). The build is what is drawn first.
+    16908: { build: 'sphere', file: 'ajisai.glb', colour: 'satellite', name: 'Ajisai', catalogue: 'AJISAI (EGS)', made: 'dimensions' },
+    8820: { build: 'sphere', file: 'lageos.glb', colour: 'satellite', name: 'LAGEOS', catalogue: 'LAGEOS 1', made: 'dimensions' },
+    22195: { build: 'sphere', file: 'lageos.glb', colour: 'satellite', name: 'LAGEOS', catalogue: 'LAGEOS 2', made: 'dimensions' },
+    // THE OTHER SIX, AND LARES-2, HAVE THEIR OWN SURFACES since batch three (2026-10-13): five files,
+    // each built in code from what the International Laser Ranging Service's mission page (NASA-hosted)
+    // says of its ball, with no generator (registry rows `starlette`, `lares`, `lares2`, `etalon`,
+    // `westpac`, kind `built-from-dimensions`). No route keeps the one plain ball any more; it is
+    // what each draws while its file is on its way.
+    //   starlette.glb  24 cm, 60 cubes, three on each of twenty triangular plates. Starlette and
+    //                  Stella wear it: the page gives both one description ("60 identical").
+    //   lares.glb      36.4 cm, 92 cubes in the rows of the mission's own table (1, 5, 10, 14, 16 a
+    //                  hemisphere, each at its latitude and first longitude).
+    //   lares2.glb     42.4 cm, 303 cubes. THE COUNT IS PUBLISHED AND THE PLACEMENT IS OURS (the table
+    //                  of coordinates is a scan nobody here read), and the row says so, as Ajisai's does.
+    //   etalon.glb     1.294 m, 2 146 cubes in 306 arrays. Counts published, placement ours. Etalon 1
+    //                  and 2 wear it.
+    //   westpac.glb    a 182 mm ball under sixty baffle tubes, 245 mm over them, three on each face
+    //                  of an icosahedron: the one ball that is not smooth.
+    // LARES-2 IS 53105 in the catalogue saved on 2026-10-12 ("LARES-2"); the id it is often given,
+    // 52307, is STARLINK-3755, which is why it had no row before. scripts/check-model-ids.sh holds it.
+    // Larets (27944) and the Calspheres have no row: no page read gives Larets's arrangement, and
+    // the ILRS has no page for a Calsphere.
+    7646: { build: 'sphere', file: 'starlette.glb', colour: 'satellite', name: 'Starlette', catalogue: 'STARLETTE', made: 'dimensions' },
+    22824: { build: 'sphere', file: 'starlette.glb', colour: 'satellite', name: 'Stella', catalogue: 'STELLA', made: 'dimensions' },
+    38077: { build: 'sphere', file: 'lares.glb', colour: 'satellite', name: 'LARES', catalogue: 'LARES', made: 'dimensions' },
+    53105: { build: 'sphere', file: 'lares2.glb', colour: 'satellite', name: 'LARES-2', catalogue: 'LARES-2', made: 'dimensions' },
+    19751: { build: 'sphere', file: 'etalon.glb', colour: 'satellite', name: 'Etalon 1', catalogue: 'COSMOS 1989 (ETALON 1)', made: 'dimensions' },
+    20026: { build: 'sphere', file: 'etalon.glb', colour: 'satellite', name: 'Etalon 2', catalogue: 'COSMOS 2024 (ETALON 2)', made: 'dimensions' },
+    25398: { build: 'sphere', file: 'westpac.glb', colour: 'satellite', name: 'WESTPAC', catalogue: 'WESTPAC', made: 'dimensions' },
 
     // ---------------------------------------------------------------------------------------
     // TSELINA-2, the eighteen of them still in the catalogue.
@@ -507,7 +600,7 @@ export const REAL_MODELS = {
     // NOAA 15, 18 and 19 are the Advanced TIROS-N / POES bus and among the brightest things a
     // person can see pass over. Matched on the full name, whole words, klass satellite: "NOAA 15"
     // yes, "NOAA 15 DEB" no (klass debris), NOAA 20 no (a JPSS bus, already mapped by id to the
-    // Suomi model), NOAA 21 no (JPSS-2, a different bus; it keeps the generic shape and says so).
+    // Suomi model), NOAA 21 no (JPSS-2, a different bus; since 2026-10-13 it has a file of its own, by id, above).
     // By name rather than by catalogue number because a number that cannot be checked live today
     // is a number that shipped wrong once before.
     // OCO-2 is on the `active` layer under the catalogue name OCO 2. By name, not id: its id was not
@@ -542,8 +635,14 @@ export const REAL_MODELS = {
     'css (mengtian': { build: 'tiangong-module', colour: 'station', name: 'a Tiangong laboratory module', displayName: 'Mengtian, a Tiangong module', klass: ['station'], generic: true },
     // Shenzhou and Tianzhou: the Soyuz plan at Chinese proportions, white-grey, wings on both ends
     // of a Shenzhou. CC BY models exist for both (spec 0027, Ivan's list); procedural until then.
-    shenzhou: { build: 'shenzhou', colour: 'station', name: 'a Shenzhou spacecraft', klass: ['station', 'satellite'], generic: true },
-    tianzhou: { build: 'tianzhou', colour: 'station', name: 'a Tianzhou cargo ship', klass: ['station', 'satellite'], generic: true },
+    // FILES AS WELL since batch three (2026-10-13; public #941, #942), each hull ONE LATHE as the
+    // Soyuz's, built in code from the published metres (registry rows `shenzhou`, `tianzhou`, kind
+    // `built-from-dimensions`). shenzhou.glb is the generation that flies now: ONE pair of wings, on
+    // the service module. tianzhou.glb: a 3.35 m cargo drum, a cone, a 2.8 m propulsion module with
+    // two wings of three panels. No free picture of either exists (CMSA's are not), so the cards'
+    // sentence rests on the metres; the rows say which drawings were looked at. `generic` stays.
+    shenzhou: { build: 'shenzhou', file: 'shenzhou.glb', colour: 'station', name: 'a Shenzhou spacecraft', klass: ['station', 'satellite'], generic: true, made: 'dimensions', axes: 'app' },
+    tianzhou: { build: 'tianzhou', file: 'tianzhou.glb', colour: 'station', name: 'a Tianzhou cargo ship', klass: ['station', 'satellite'], generic: true, made: 'dimensions', axes: 'app' },
     // Dragon 2, crew or cargo: CelesTrak names them CREW DRAGON n and DRAGON CRS-n. Both keys, so
     // a bare `dragon` never catches anything else. A CC BY model is on Ivan's list (spec 0027).
     // Iridium: 66 NEXT satellites in service and the first generation's survivors, all one plan.
@@ -687,10 +786,23 @@ export const REAL_MODELS = {
     // because a key the catalogue never says is a file nobody ever sees. Klass satellite only, so
     // the launch's debris and spent stage keep their own shapes.
     spacemobile: { build: 'spacemobile', colour: 'satellite', name: 'a BlueBird direct-to-phone satellite', klass: ['satellite'], generic: true },
-    'crew dragon': { build: 'dragon', colour: 'station', name: 'a Dragon spacecraft', klass: ['station', 'satellite'], generic: true },
-    // The cargo vehicle flies without the escape engines, so without their pods and the trunk's fins.
-    'dragon crs': { build: 'dragon-cargo', colour: 'station', name: 'a Cargo Dragon spacecraft', klass: ['station', 'satellite'], generic: true },
-    soyuz: { build: 'soyuz', colour: 'station', name: 'a Soyuz spacecraft', klass: ['station', 'satellite'], generic: true },
+    // FILES AS WELL since batch three (2026-10-13; public #937): the capsule turned on a lathe from
+    // the heat shield's rim to the docking port, the nose cone OPEN as it is on orbit, the trunk
+    // with cells on the half toward the Sun and radiators on the other (registry rows `dragon-crew`,
+    // `dragon-cargo`, kind `built-from-dimensions`). The generated Dragon of 2026-10-12 was a lump
+    // that lost to the build; these are built from dimensions. No logo and no lettering on either.
+    'crew dragon': { build: 'dragon', file: 'dragon-crew.glb', colour: 'station', name: 'a Dragon spacecraft', klass: ['station', 'satellite'], generic: true, made: 'dimensions', axes: 'app' },
+    // The cargo vehicle flies without the escape engines: a smooth hull with no pods, no windows,
+    // and TWO fins on the trunk where the crew vehicle has four (the build draws none).
+    'dragon crs': { build: 'dragon-cargo', file: 'dragon-cargo.glb', colour: 'station', name: 'a Cargo Dragon spacecraft', klass: ['station', 'satellite'], generic: true, made: 'dimensions', axes: 'app' },
+    // A FILE AS WELL since 2026-10-13 (public #939): soyuz-ms.glb, whose hull is ONE LATHE, a profile
+    // turned round the long axis, built in code from the same published metres the build uses and
+    // NASA's two drawings for the curve between them (registry row `soyuz-ms`, kind
+    // `built-from-dimensions`): the orbital module is a ball with its docking collar and probe, the
+    // descent module a bell with a curved flank, the service module a drum with a flared skirt.
+    // `generic` stays, as the Cygnus has it: the name matches every Soyuz the catalogue may hold.
+    // `axes: 'app'`: nose to the Earth, wings across the Sun, which is how the build flies.
+    soyuz: { build: 'soyuz', file: 'soyuz-ms.glb', colour: 'station', name: 'a Soyuz spacecraft', klass: ['station', 'satellite'], generic: true, made: 'dimensions', axes: 'app' },
     // Cygnus: the round UltraFlex fans are the recognition, and nothing free exists (spec 0027,
     // issue #423). Klass-gated and a whole word, so the Cygnus Loop, Cygnus X-1 and anything else
     // named for the Swan stay untouched: checked 2026-10-12 against the saved `stations` and
@@ -705,7 +817,11 @@ export const REAL_MODELS = {
     // Enhanced vehicle and the ship flying today is the 8 m Cygnus XL, so it is the kind of thing.
     // The build is what is drawn while the file is on its way, and what stays if it never arrives.
     cygnus: { build: 'cygnus', file: 'cygnus.glb', colour: 'station', name: 'a Cygnus cargo ship', klass: ['station', 'satellite'], generic: true, made: 'images' },
-    progress: { build: 'progress', colour: 'station', name: 'a Progress cargo ship', klass: ['station', 'satellite'], generic: true },
+    // A FILE AS WELL since batch three (2026-10-13; public #940): progress-ms.glb, the Soyuz's sibling
+    // on the same lathe: a cargo module where the Soyuz has its ball, the refuelling module where it
+    // has its bell, no periscope and no window (registry row `progress-ms`). Its own key and its own
+    // file: a Progress is never drawn as a Soyuz, nor a Soyuz as a Progress (the tests hold both).
+    progress: { build: 'progress', file: 'progress-ms.glb', colour: 'station', name: 'a Progress cargo ship', klass: ['station', 'satellite'], generic: true, made: 'dimensions', axes: 'app' },
     bennu: { file: 'asteroid-bennu.glb', colour: 'asteroid', name: '101955 Bennu', klass: ['asteroid'] },
     // Dawn's shape model, from NASA's 3D Printing collection. The same collection has Eros and
     // Itokawa, and neither is used: both are cut in half for printing and laid out as two pieces.
