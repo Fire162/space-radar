@@ -1321,7 +1321,6 @@ export const COPY = {
     // In place of the three numbers, on the card of a craft whose mission is over.
     endedLine: 'Its mission ended on {date}. Its events, below, go back to it.',
     pathEndedLine: 'The path JPL holds for it ends on {date}. Its events, below, go back to it.',
-    noPosition: 'There is no position for this object right now.',
 
     actions: {
       flyTo: 'Fly to it',
