@@ -1,8 +1,8 @@
 // model: ONE CRAFT'S MODEL, IN THE APP, FROM FOUR SIDES. Select a record as a click on its row does,
 // wait for the file its route names to replace the procedural shape (scene/heroes.js announces it
 // with `sr:model-upgraded`), move the clock into sunlight if the craft is in the Earth's shadow, then
-// photograph it as the app frames it, from four sides (a quarter turn round it each time, the camera
-// kept above the craft) and from overhead.
+// photograph it as the app frames it and from five places on its SUNWARD side, at the same distance,
+// the camera never below the craft (see `walk`).
 //
 //   gh workflow run look.yml -f probe=model                      # the Cygnus cargo ship in orbit today
 //   gh workflow run look.yml -f probe=model -f subject=sat-25544  # any record id
@@ -45,14 +45,28 @@ const stations = sr.recordsFor('stations') || [];
 // and the summary carries one entry a subject under `subjects`; any one's `fail` fails the run.
 // No record id and no name on the stations layer has an underscore in it.
 const param = new URLSearchParams(location.search).get('lookSubject');
-const one = async (asked, prefix) => {
+const one = async (askedAs, prefix) => {
 const out = { subject: null, standIn: null, views: [], stations: stations.length };
+// A ROUTE WITH NO CRAFT UP TODAY (2026-10-13, batch three: no Cargo Dragon is in orbit): the subject
+// `sat-100882.as.dragon-crs` photographs the named route `dragon crs` on that record, FOR THE PICTURE
+// ONLY, as the Cygnus's stand-in below does; the summary says so in `standIn`.
+const [asked, wearAs] = String(askedAs || '').includes('.as.') ? String(askedAs).split('.as.') : [askedAs, null];
 // A subject is a record id, or failing that the words of a name with dashes for spaces
 // (`crew-dragon`: a visiting vehicle's id changes every flight, and its name does not).
 const byName = (words) => stations.find((r) => String(r.name || '').toLowerCase().includes(String(words).toLowerCase().replace(/-/g, ' '))) || null;
 // A subject on another layer (a satellite worth knowing, a bright one) arrives when its layer's
 // file does, which is after the stations: wait for it before saying it is not there.
-if (asked) await until(() => sr.recordById(asked) || byName(asked), 120000, 500);
+if (asked) {
+  const there = () => sr.recordById(asked) || byName(asked);
+  await until(there, 60000, 500);
+  // NOT ON A LAYER THAT IS ON BY DEFAULT (2026-10-13: LAGEOS 1 is only in the whole active catalogue).
+  // A visitor reaches it by turning "All active satellites" on, one tap; so does the probe, and the
+  // summary says it did. The run saves that catalogue's column twin for this probe (look.yml).
+  if (!there()) {
+    try { if (!sr.isLayerOn('active')) { sr.setLayerOn('active', true); out.layerTurnedOn = 'active'; } } catch { /* an older ref has no such layer */ }
+    await until(there, 180000, 500);
+  }
+}
 let record = asked ? (sr.recordById(asked) || byName(asked)) : stations.find((r) => wordIn(r.name, 'cygnus') && RM.realModelFor(r)) || null;
 if (asked && !record) return ({ ...out, fail: 'no record with the id or the name ' + asked + ' on this page; the stations layer has ' + stations.map((r) => r.id + ' ' + r.name).join(', ') });
 if (!record) {
@@ -62,6 +76,14 @@ if (!record) {
   const norad = record.meta && (record.meta.noradId ?? record.meta.catalogueNumber);
   RM.REAL_MODELS.norad[norad] = { ...RM.REAL_MODELS.named.cygnus };
   out.standIn = 'NO CYGNUS IS IN THE SAVED DATA TODAY: the model is drawn on ' + record.name + ' (' + record.id + ') for the picture only';
+}
+if (wearAs) {
+  const key = wearAs.replace(/-/g, ' ');
+  const worn = RM.REAL_MODELS.named[key];
+  if (!worn) return ({ ...out, fail: 'no named route `' + key + '` to put on ' + record.name });
+  const norad = record.meta && (record.meta.noradId ?? record.meta.catalogueNumber);
+  RM.REAL_MODELS.norad[norad] = { ...worn };
+  out.standIn = 'THE ROUTE `' + key + '` IS DRAWN ON ' + record.name + ' (' + record.id + ') FOR THE PICTURE ONLY: no craft of that name is in the saved data today';
 }
 const entry = RM.realModelFor(record) || {};
 out.subject = { id: record.id, name: record.name, klass: record.klass, layer: record.layer };
@@ -159,29 +181,72 @@ const onScreen = () => {
   } catch { return null; }
 };
 /**
- * The app's own framing, then four sides and one from overhead. THE CAMERA STAYS ABOVE THE CRAFT:
- * a visiting vehicle flies a few hundred kilometres up, and a camera sent to its far side at the
- * angle the app frames it from ends up under the ground looking at the inside of the clouds (the
- * first run did). So the four sides are taken from sixty degrees off the local vertical at most.
+ * The app's own framing, then FIVE LIT, FRAMED VIEWS FROM THE SUNWARD SIDE (2026-10-13, the second
+ * batch of models). The first walk turned the camera round the craft by the rig's own azimuth, a
+ * quarter turn at a time: its 180-degree view was black in EVERY run (the camera stood on the
+ * craft's unlit side with the Sun in its eyes, or behind the Earth), and a wing was photographed
+ * from its back more often than from its cells. A craft is lit by the Sun and nothing else, so the
+ * camera now stands where the light comes from, in the frame the app itself orients a craft by
+ * (scene/models.js updateModelAttitude, `sun-panels`):
+ *
+ *   Z  toward the Earth's centre (the craft's +Z, its Earth face);
+ *   X  the Sun crossed with Z (the craft's panel axis);
+ *   Y  Z crossed with X: the Sun's direction laid flat on the local horizon (the cells' side).
+ *
+ * In that frame the Sun is at (0, +, -) whenever the craft is in daylight. Every place below has
+ * y > 0 and z <= 0, which makes three promises at once: THE SUN IS BEHIND THE CAMERA (the faces it
+ * sees are lit, and there is no glare); THE CAMERA IS NEVER BELOW THE CRAFT (z <= 0 is at or above
+ * its altitude, so the line of sight cannot pass through the Earth, and the ground is a backdrop at
+ * most); and the cell side of a wing faces it. The distance is the one the app framed the craft at,
+ * so the craft fills the same share of every picture. For a craft with another attitude (a tumbling
+ * sphere) the frame is still the Sun's and the Earth's, which is all a lit view needs.
  */
+const sunFrame = () => {
+  const obj = heroOf();
+  const sun = sr.worlds.meshFor('sun');
+  const earth = sr.worlds.meshFor('earth');
+  if (!obj || !sun || !earth) return null;
+  const p = obj.getWorldPosition(obj.position.clone());
+  const z = unit({ x: earth.position.x - p.x, y: earth.position.y - p.y, z: earth.position.z - p.z });
+  const s = unit({ x: sun.position.x - p.x, y: sun.position.y - p.y, z: sun.position.z - p.z });
+  let x = cross(s, z);
+  if (Math.hypot(x.x, x.y, x.z) < 1e-4) x = cross({ x: 0, y: 1, z: 0 }, z);   // the Sun exactly overhead
+  x = unit(x);
+  return { x, y: unit(cross(z, x)), z, s };
+};
+// [name, the place in that frame (x along the panels, y sunward along the horizon, z down), words]
+const PLACES = [
+  ['2-sunward-right', [0.62, 0.66, -0.42], 'from the sunward side, to the right of the panel axis and above'],
+  ['3-sunward-left', [-0.62, 0.66, -0.42], 'from the sunward side, to the left and above'],
+  ['4-sun-face', [0.14, 0.93, -0.34], 'square onto the face the Sun lights (a wing\'s cells)'],
+  ['5-along-the-panels', [0.9, 0.32, -0.3], 'along the panel axis, the Sun over the camera\'s shoulder'],
+  ['6-from-above', [0.3, 0.42, -0.86], 'from above, away from the Earth, leaning sunward'],
+];
 const walk = async (tag, what) => {
   const a0 = rig.state.azimuth;
   const p0 = rig.state.polar;
-  const take = async (name, words) => {
+  const d0 = rig.state.distance;
+  const take = async (name, words, extra) => {
     await sleep(4000);
     const at = onScreen();
     await shot(prefix + tag + '-' + name, what + ', ' + words + '; its circle ' + (at && at.px) + ' px across');
-    out.views.push({ name: prefix + tag + '-' + name, at });
+    out.views.push({ name: prefix + tag + '-' + name, at, ...(extra || {}) });
   };
   await take('1-as-framed', 'as the app frames a selected craft');
-  const high = Math.min(p0, 1.05);
-  for (const [name, turn] of [['2-side-a', 0], ['3-side-b', Math.PI / 2], ['4-side-c', Math.PI], ['5-side-d', 1.5 * Math.PI]]) {
-    rig.setAngles(a0 + turn, high);
-    await take(name, Math.round((turn * 180) / Math.PI) + ' degrees round it, from ' + Math.round((high * 180) / Math.PI) + ' degrees off the vertical');
+  for (const [name, [lx, ly, lz], words] of PLACES) {
+    const f = sunFrame();
+    if (!f) { look.warns.push('probe: no Sun or no Earth in the scene; ' + name + ' was not taken'); continue; }
+    let d = unit(mix(mix(f.x, lx, f.y, ly), 1, f.z, lz));
+    // The Sun below the craft's horizon (a craft lit over the night side): lean toward the light.
+    let lit = d.x * f.s.x + d.y * f.s.y + d.z * f.s.z;
+    if (lit < 0.2) { d = unit(mix(d, 1, f.s, 0.6)); lit = d.x * f.s.x + d.y * f.s.y + d.z * f.s.z; }
+    const above = -(d.x * f.z.x + d.y * f.z.y + d.z * f.z.z);
+    if (above < 0) { d = unit(mix(d, 1, f.z, above)); }                    // never below the craft: flatten onto its horizon
+    rig.flyTo({ offset: d, distance: d0, ms: 0 });
+    await take(name, words + '; the Sun ' + Math.round((Math.acos(Math.max(-1, Math.min(1, lit))) * 180) / Math.PI) + ' degrees from the line of sight',
+      { sunAngleDeg: Math.round((Math.acos(Math.max(-1, Math.min(1, lit))) * 180) / Math.PI), aboveHorizon: above >= 0 });
   }
-  rig.setAngles(a0 + Math.PI / 4, 0.3);
-  await take('6-overhead', 'from nearly overhead');
-  rig.setAngles(a0, p0);
+  rig.flyTo({ azimuth: a0, polar: p0, distance: d0, ms: 0 });
   await sleep(1500);
 };
 await walk('flat', (out.standIn ? 'the model on a stand-in record' : record.name) + ' wearing ' + (entry.file || entry.build || 'its class shape'));
@@ -275,6 +340,10 @@ const done = [];
 for (const subject of subjects) {
   try { done.push(await one(subject, subjects.length > 1 ? subject + '--' : '')); }
   catch (e) { done.push({ subject: { id: subject }, views: [], fail: 'the probe threw on ' + subject + ': ' + String((e && e.message) || e) }); }
+  // A layer this subject needed is put back as it was: sixteen thousand dots do not belong in the
+  // next craft's pictures (the third run of batch two photographed Ajisai through them).
+  const last = done[done.length - 1];
+  if (last && last.layerTurnedOn) { try { sr.setLayerOn(last.layerTurnedOn, false); await sleep(1500); } catch { /* it stays on, and the pictures show it */ } }
 }
 const failed = done.filter((d) => d.fail).map((d) => d.fail);
 // One subject: its own summary, as this probe has always returned it. Several: one entry each.
