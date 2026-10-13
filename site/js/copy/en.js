@@ -1895,7 +1895,6 @@ export const COPY = {
     pause: 'Pause',
     pauseTitle: 'Pause (Space)',
     play: 'Play',
-    playTitle: 'Play (Space)',
     resume: 'Resume',
     resumeTitle: 'Fly back to the stop and carry on (Space)',
     back: 'Previous stop',
